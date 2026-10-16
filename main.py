@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from typing import List
@@ -13,6 +14,14 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 oauth2 = OAuth2PasswordBearer(tokenUrl="/login")
 
 
@@ -25,9 +34,9 @@ def get_db():
 
 
 def get_current_user(token: str = Depends(oauth2), db: Session = Depends(get_db)):
-    print("token recieved:",token)
+    print("token recieved:", token)
     user_id = decode_token(token)
-    
+
     if not user_id:
         raise HTTPException(401, "Invalid token")
 
@@ -59,8 +68,6 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(500, str(e))
 
 
-
-
 @app.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(
@@ -72,7 +79,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
     token = create_token(db_user.id)
     return {"access_token": token, "token_type": "bearer"}
-
 
 
 @app.post("/tasks", response_model=schemas.TaskResponse)
@@ -102,7 +108,7 @@ def get_tasks(
         models.Task.owner_id == user.id
     ).all()
 
-# main.py
+
 @app.put("/tasks/{task_id}", response_model=schemas.TaskResponse)
 def update_task_put(
     task_id: int,
@@ -117,7 +123,7 @@ def update_task_put(
 
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    
+
     task.title = task_data.title
     task.completed = task_data.completed
 
@@ -126,7 +132,6 @@ def update_task_put(
     return task
 
 
-# main.py
 @app.delete("/tasks/{task_id}", response_model=dict)
 def delete_task(
     task_id: int,
