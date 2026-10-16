@@ -18,13 +18,15 @@ from resume_content import (
 WIDTH = 96
 
 
-def wrap(text, indent="", width=WIDTH):
+def wrap(text, indent="", hanging=None, width=WIDTH):
+    """Wrap to width. `indent` starts the first line, `hanging` continues it."""
+    cont = indent if hanging is None else hanging
     words, lines, line = text.split(), [], indent
     for word in words:
         candidate = f"{line} {word}" if line.strip() else f"{line}{word}"
         if len(candidate) > width and line.strip():
             lines.append(line)
-            line = f"{indent}{word}"
+            line = f"{cont}{word}"
         else:
             line = candidate
     lines.append(line)
@@ -46,7 +48,7 @@ def main():
 
     out += ["TECHNICAL SKILLS", "-" * WIDTH]
     for label, value in SKILLS:
-        out += wrap(f"{label}: {value}")
+        out += wrap(f"{label}: {value}", hanging="  ")
     out.append("")
 
     out += ["TECHNICAL EXPERIENCE", "-" * WIDTH]
@@ -54,13 +56,13 @@ def main():
         out.append(f"{job['title']}  ({job['period']})")
         out.append(f"{job['context']}" + (f" — {job['sub']}" if job.get("sub") else ""))
         for bullet in job["bullets"]:
-            out += wrap(f"- {bullet}", indent="  ")
+            out += wrap(f"- {bullet}", indent="  ", hanging="    ")
         out.append(f"  Stack: {job['stack']}")
         out.append("")
 
     out += ["SELECTED PROJECTS", "-" * WIDTH]
     for title, desc, stack in PROJECTS:
-        out += wrap(f"- {title} — {desc} ({stack})")
+        out += wrap(f"- {title} — {desc} ({stack})", hanging="  ")
     out.append("")
 
     out += ["EDUCATION", "-" * WIDTH]
