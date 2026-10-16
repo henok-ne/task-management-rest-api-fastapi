@@ -1,14 +1,16 @@
-from jose import jwt, JWTError
+import os
 from datetime import datetime, timedelta
 
-SECRET = "SUPERSECRET"
+from jose import jwt, JWTError
+
+SECRET = os.getenv("SECRET_KEY", "SUPERSECRET")
 ALGO = "HS256"
 
 
 def create_token(user_id: int):
     payload = {
         "sub": str(user_id),
-        "exp": datetime.utcnow() + timedelta(minutes=60)
+        "exp": datetime.utcnow() + timedelta(minutes=60),
     }
 
     return jwt.encode(payload, SECRET, algorithm=ALGO)
