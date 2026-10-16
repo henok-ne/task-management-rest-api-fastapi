@@ -12,7 +12,7 @@ export const profile = {
   email: 'henokmesne@gmail.com',
   linkedin: 'https://www.linkedin.com/in/henok-mesfin-9341353b1/',
   github: 'https://github.com/henok-ne',
-  cvFile: '/henok-mesfin-resume.html',
+  cvFile: '/Henok-Mesfin-Resume.pdf',
   status: 'Open to work',
 }
 
