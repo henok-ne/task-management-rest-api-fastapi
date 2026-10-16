@@ -187,103 +187,27 @@ def styles():
 
 
 # ---------------------------------------------------------------- content
-NAME = "Henok Mesfin"
-ROLE = "Software Engineering Student &nbsp;·&nbsp; Python &amp; JavaScript &nbsp;·&nbsp; Full-Stack Developer &nbsp;·&nbsp; Addis Ababa"
-CONTACT_LEFT = (
-    "henokmesne@gmail.com<br/>"
-    "linkedin.com/in/henok-mesfin-9341353b1<br/>"
-    "github.com/henok-ne"
-)
-CONTACT_RIGHT = (
-    "Addis Ababa, Ethiopia (UTC+3)<br/>"
-    "Third-year BSc Software Engineering<br/>"
-    "Open to remote contract work"
-)
-
-SUMMARY = (
-    "Third-year software engineering student with three years of building across Python and JavaScript. I write and review "
-    "code against precise specifications — Ethiopia\u2019s ERCA tax schedule as a payroll engine, tenant isolation with "
-    "row-level security, and a 20-scenario behavioural test suite for AI assistants that runs on every commit. Comfortable "
-    "debugging unfamiliar systems, designing REST APIs, and giving exacting, evidence-backed technical feedback."
+from resume_content import (
+    CONTACT_RIGHT as CONTACT_RIGHT_LINES,
+    EDUCATION,
+    EMAIL,
+    EXPERIENCE,
+    FOOTER,
+    NAME,
+    PROJECTS,
+    ROLE,
+    SKILLS,
+    SUMMARY,
 )
 
-SKILLS = [
-    ("Languages", "Python, JavaScript, SQL, HTML/CSS (TypeScript in progress)"),
-    ("Backend &amp; APIs", "FastAPI, Next.js route handlers, REST API design, SQLAlchemy 2.0, Mongoose, JWT/OAuth2, RBAC"),
-    ("Data &amp; systems", "PostgreSQL, MongoDB, Supabase, SQLite, schema design, indexing, Row Level Security, tenant isolation"),
-    ("Frontend", "React 19, Next.js 15 (App Router), Tailwind CSS, responsive UI"),
-    ("Testing &amp; QA", "Behavioural test design, prompt-injection and hallucination evaluation, CI regression suites"),
-    ("Tooling", "Git/GitHub, Docker &amp; Compose, GitHub Actions, Vercel, Linux/CLI, technical documentation"),
-]
 
-EXPERIENCE = [
-    {
-        "title": "EthioPayroll — Full-Stack Developer",
-        "meta": "Self-directed, open source<br/>2026 — Present",
-        "sub": "Payroll, HR and compliance SaaS for Ethiopian businesses",
-        "bullets": [
-            "Implemented Ethiopia\u2019s ERCA payroll engine — progressive tax across six brackets, a 7% / 11% pension split, four overtime multipliers — as one shared module, verified bracket-by-bracket against the published schedule.",
-            "Designed a multi-tenant schema (12 models, 21 REST routes) with role-based access control, scoping every query by tenant so no request can cross a company boundary.",
-            "Diagnosed a duplicate-query and duplicate-subscription pattern that fired on every dashboard navigation, and fixed it by lifting profile resolution into one React context provider.",
-        ],
-        "stack": "Next.js 15 · React 19 · MongoDB · Mongoose · NextAuth · Tailwind CSS · Recharts",
-    },
-    {
-        "title": "Backend, Security &amp; AI Quality — Backend Developer",
-        "meta": "Self-directed, open source<br/>2025 — 2026",
-        "sub": "Authenticated APIs, hardened deployments, behavioural evaluation of AI assistants",
-        "bullets": [
-            "Built a JWT-authenticated CRUD API in FastAPI with bcrypt hashing and ownership checks in every query — 47 commits, one codebase running locally, in Docker, and serverless on Vercel.",
-            "Authored a 20-scenario behavioural suite for AI assistants — hallucination, prompt injection, privacy leaks, ambiguity, unauthorised actions — run in CI on every push.",
-            "Reviewed a 16/20 first pass, isolated four failure modes, and documented each fix in a written case study with a reusable evaluation rubric.",
-        ],
-        "stack": "Python · FastAPI · SQLAlchemy 2.0 · PostgreSQL · Docker · GitHub Actions · Vercel",
-    },
-    {
-        "title": "Full-Stack Foundations — Self-taught Developer",
-        "meta": "Self-directed<br/>2023 — 2025",
-        "bullets": [
-            "Learned Python and JavaScript from first principles — CLI tools with structured exception handling, framework-free HTML/CSS layouts, then React, async data fetching and relational schemas.",
-        ],
-        "stack": "Python · JavaScript · HTML &amp; CSS · React · Git",
-    },
-]
+def esc(text):
+    """Escape plain text for ReportLab's inline markup."""
+    return str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-PROJECTS = [
-    (
-        "EthioPayroll",
-        "Multi-tenant payroll and HR SaaS: 12 models, 21 REST routes, 25 RLS policies.",
-        "Next.js · MongoDB · NextAuth",
-    ),
-    (
-        "Task Management REST API",
-        "JWT-authenticated FastAPI service; one codebase, local, Docker and serverless.",
-        "Python · FastAPI · PostgreSQL · Docker",
-    ),
-    (
-        "AgentProof Starter",
-        "Behavioural QA kit for AI assistants: 20 scenarios in CI, published case study and rubric.",
-        "Python · YAML · GitHub Actions",
-    ),
-    (
-        "Pediatric Dose Reference",
-        "Offline clinical calculator: 116 drugs, 164 dosing lines, weight-based dosing.",
-        "JavaScript · HTML · CSS",
-    ),
-]
 
-EDUCATION = [
-    {
-        "school": "HiLCoE School of Computer Science &amp; Technology",
-        "detail": "BSc Software Engineering, third year. Coursework: data structures and algorithms, databases, web development.",
-        "meta": "Addis Ababa, Ethiopia",
-    },
-    {
-        "school": "Open source &amp; self-directed work",
-        "detail": "Eight public repositories, each documented and deployed where it can be — not tutorial forks.",
-        "meta": "2023 — Present",
-    },
-]
+CONTACT_LEFT = f"{EMAIL}<br/>linkedin.com/in/henok-mesfin-9341353b1<br/>github.com/henok-ne"
+CONTACT_RIGHT = "<br/>".join(esc(line) for line in CONTACT_RIGHT_LINES)
 
 
 # ---------------------------------------------------------------- layout
@@ -304,7 +228,7 @@ def header_block(s):
             ]
         )
     )
-    return [Paragraph(NAME, s["name"]), Paragraph(ROLE, s["role"]), Spacer(1, 3), table]
+    return [Paragraph(esc(NAME), s["name"]), Paragraph(esc(ROLE), s["role"]), Spacer(1, 3), table]
 
 
 def section(title, s, first=False):
@@ -325,7 +249,7 @@ def skills_block(s):
     out = []
     for label, value in SKILLS:
         out.append(
-            Paragraph(f"<b>{label}:</b>&nbsp; {value}", s["skill"])
+            Paragraph(f"<b>{esc(label)}:</b>&nbsp; {esc(value)}", s["skill"])
         )
     return out
 
@@ -334,7 +258,7 @@ def experience_block(s):
     out = []
     for job in EXPERIENCE:
         head = Table(
-            [[Paragraph(job["title"], s["job-head"]), Paragraph(job["meta"], s["job-meta"])]],
+            [[Paragraph(esc(job["title"]), s["job-head"]), Paragraph(esc(job["context"]) + "<br/>" + esc(job["period"]), s["job-meta"])]],
             colWidths=[5.1 * inch, 2.22 * inch],
         )
         head.setStyle(
@@ -350,12 +274,12 @@ def experience_block(s):
         )
         block = [head]
         if job.get("sub"):
-            block += [Paragraph(job["sub"], s["job-sub"]), Spacer(1, 2.5)]
+            block += [Paragraph(esc(job["sub"]), s["job-sub"]), Spacer(1, 2.5)]
         else:
             block += [Spacer(1, 1.5)]
         for b in job["bullets"]:
-            block.append(Paragraph(b, s["bullet"], bulletText="—"))
-        block.append(Paragraph(job["stack"], s["stack"]))
+            block.append(Paragraph(esc(b), s["bullet"], bulletText="—"))
+        block.append(Paragraph(esc(job["stack"]), s["stack"]))
         block.append(Spacer(1, 5))
         out.append(KeepTogether(block))
     return out
@@ -366,7 +290,7 @@ def projects_block(s):
     for title, desc, stack in PROJECTS:
         out.append(
             Paragraph(
-                f"<b>{title}</b> — {desc} <font face='Mono' size='7.3' color='#7A7367'>{stack}</font>",
+                f"<b>{esc(title)}</b> — {esc(desc)} <font face='Mono' size='7.3' color='#7A7367'>{esc(stack)}</font>",
                 s["proj"],
             )
         )
@@ -379,8 +303,8 @@ def education_block(s):
         head = Table(
             [
                 [
-                    Paragraph(item["school"], s["job-head"]),
-                    Paragraph(item["meta"], s["job-meta"]),
+                    Paragraph(esc(item["school"]), s["job-head"]),
+                    Paragraph(esc(item["right"]), s["job-meta"]),
                 ]
             ],
             colWidths=[5.1 * inch, 2.22 * inch],
@@ -396,7 +320,7 @@ def education_block(s):
                 ]
             )
         )
-        out.extend([head, Paragraph(item["detail"], s["body"])])
+        out.extend([head, Paragraph(esc(item["detail"]), s["body"])])
         if i < len(EDUCATION) - 1:
             out.append(Spacer(1, 5))
     return out
@@ -456,7 +380,7 @@ def build():
 
     story.append(
         Paragraph(
-            "Amharic (native) · English (professional) · 8 public repositories at github.com/henok-ne · Code samples on request.",
+            esc(FOOTER),
             ParagraphStyle(
                 "foot", fontName="Mono", fontSize=6.9, leading=8.6, textColor=MUTED
             ),

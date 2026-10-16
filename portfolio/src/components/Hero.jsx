@@ -38,8 +38,11 @@ export default function Hero() {
             <a className="link-underline" href={profile.cvFile} download>
               <span className="idx">02</span>Download CV
             </a>
+            <a className="link-underline" href={profile.cvFileDocx} download>
+              <span className="idx">03</span>Word (.docx)
+            </a>
             <a className="link-underline" href={`mailto:${profile.email}`}>
-              <span className="idx">03</span>Email Me
+              <span className="idx">04</span>Email Me
             </a>
           </div>
         </div>

@@ -42,7 +42,10 @@ export default function Contact() {
           GitHub
         </a>
         <a className="link-underline" href={profile.cvFile} download>
-          Résumé
+          Résumé (PDF)
+        </a>
+        <a className="link-underline" href={profile.cvFileDocx} download>
+          Résumé (.docx)
         </a>
         <a className="link-underline" href={`mailto:${profile.email}`}>
           Email

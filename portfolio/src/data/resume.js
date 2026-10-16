@@ -13,6 +13,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/henok-mesfin-9341353b1/',
   github: 'https://github.com/henok-ne',
   cvFile: '/Henok-Mesfin-Resume.pdf',
+  cvFileDocx: '/Henok-Mesfin-Resume.docx',
   status: 'Open to work',
 }
 
